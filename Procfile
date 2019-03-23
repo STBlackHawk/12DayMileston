@@ -1,1 +1,1 @@
-web: gunicorn STMilestone --log-file - 
+web: gunicorn STMilestone:app_STMilestone
