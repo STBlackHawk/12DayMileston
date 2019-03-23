@@ -1,1 +1,1 @@
-web: python STMilestone.py
+web: gunicorn STMilestone --log-file - 
