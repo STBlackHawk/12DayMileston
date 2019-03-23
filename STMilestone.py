@@ -42,7 +42,7 @@ cmdict["BA"]="The Boeing Company"
 
 
 
-@app_STMilestone.route("/index",methods=["GET","POST"])
+@app_STMilestone.route("/",methods=["GET","POST"])
 def index_lulu():
     if request.method == "GET":
         return render_template("Page1.html")
@@ -119,7 +119,7 @@ def error():
     if request.method == "GET":
         return render_template("error.html")
     else:
-        return redirect("/index")
+        return redirect("/")
 
 
 if __name__ == "__main__":
