@@ -1,1 +1,1 @@
-web: gunicorn STMilestone
+web: gunicorn STMilestone:app
