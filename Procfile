@@ -1,1 +1,1 @@
-web: gunicorn STMilestone:app
+web: python STMileston.py
