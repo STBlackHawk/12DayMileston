@@ -1,1 +1,1 @@
-web: python STMileston.py
+web: python STMilestone.py
