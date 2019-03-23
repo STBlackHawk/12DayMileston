@@ -123,4 +123,4 @@ def error():
 
 
 if __name__ == "__main__":
-    app_STMilestone.run(debug=True)
+    app_STMilestone.run(debug=False)
