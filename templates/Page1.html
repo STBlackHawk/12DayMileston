@@ -1,0 +1,52 @@
+<!doctype html>
+<title>Stock Market</title>
+<div class=page>
+  <h1>Which Compamy?</h1>
+  <form id='form' method='post' action='index' >
+	  <select name="Company">
+	    <option value="HD">Home Depot</option>
+	    <option value="DIS">The Walt Disney Company</option>
+	    <option value="MSFT">Microsoft Corporation</option>
+	    <option value="BA">The Boing Company</option>
+	  </select>
+	  <br><br>
+	  <div class=metanav>
+	    <h4>
+	      What type of stock(s)
+	    </h4>
+
+	    <fieldset>
+	    <legend>You can choose multiple ones also</legend>
+	    <input type="checkbox" name="Adj_Open" id="Adj_Open" value="Adj_Open" /><label for="Adj_Open">Adjusted Open</label><br />
+	    <input type="checkbox" name="Adj_High" id="Adj_High" value="Adj_High"  /><label for="Adj_High">Adjusted Hight</label><br />
+	    <input type="checkbox" name="Adj_Low" id="Adj_Low" value="Adj_Low" /><label for="Adj_Low">Adjusted Low</label><br />
+	    <input type="checkbox" name="Adj_Close" id="Adj_Close" value="Adj_Close" /><label for="Adj_Close">Adjusted Closeing</label><br />
+	    </fieldset>
+
+	  <h4>From</h4>
+	  <select name="stdate">
+	    <option value="2018-01-1">Jan-2018</option>
+	    <option value="2018-05-1">May-2018</option>
+	    <option value="2018-09-1">Sep-2018</option>
+	    <option value="2018-12-1">Dec-2018</option>
+	  </select>
+	  <br><br>
+
+	  <h4>To</h4>
+	 
+	  <select name="enddate">
+	    <option value="2018-05-1">May-2018</option>
+	    <option value="2018-09-1">Sep-2018</option>
+	    <option value="2018-12-1">Dec-2018</option>
+	    <option value="2019-02-30">Feb-2019</option>
+	  </select>
+	  <br><br>
+	   <p>
+	   <p>
+	    <input type='submit' value='Submit' />
+	   </p>
+	   </p>
+	</form>
+
+  </div>
+</div>
