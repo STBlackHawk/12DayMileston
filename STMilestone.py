@@ -45,13 +45,12 @@ cmdict["BA"]="The Boeing Company"
 
 @app_STMilestone.route("/",methods=["GET","POST"])
 def index_lulu():
-    
+    app_STMilestone.prTypes=[]
     if request.method == "GET":
         request.form = {}
         return render_template("Page1.html")
 
     else:
-        app_STMilestone.prTypes=[]
         app_STMilestone.Company = request.form["Company"]
         app_STMilestone.stDate = request.form["stdate"]
         app_STMilestone.endDate = request.form["enddate"]
