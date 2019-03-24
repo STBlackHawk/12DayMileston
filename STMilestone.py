@@ -20,11 +20,12 @@ import datetime
 
 
 
+
 app_STMilestone = Flask(__name__)
 
 
 
-app_STMilestone.prTypes=[]
+
 colors = ["navy", "green", "purple", "red"]
 prTypes = ["Adj_Open","Adj_High", "Adj_Low", "Adj_Close"]
 cmdict={}
@@ -44,11 +45,13 @@ cmdict["BA"]="The Boeing Company"
 
 @app_STMilestone.route("/",methods=["GET","POST"])
 def index_lulu():
-    j=0
+    
     if request.method == "GET":
+        request.form = {}
         return render_template("Page1.html")
 
     else:
+        app_STMilestone.prTypes=[]
         app_STMilestone.Company = request.form["Company"]
         app_STMilestone.stDate = request.form["stdate"]
         app_STMilestone.endDate = request.form["enddate"]
@@ -93,7 +96,7 @@ def index_lulu():
             p = figure(plot_width=800, plot_height=350, x_axis_type="datetime")
             
             # add renderers
-            
+            j=0
             for i in app_STMilestone.prTypes:
                 if j > 3 : 
                     j = 0
@@ -109,7 +112,7 @@ def index_lulu():
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
             save(p)
-            
+            request.form = {}
             return redirect("/plot")
           
 
