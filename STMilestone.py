@@ -44,7 +44,6 @@ cmdict["BA"]="The Boeing Company"
 
 @app_STMilestone.route("/",methods=["GET","POST"])
 def index_lulu():
-    j=0
     if request.method == "GET":
         return render_template("Page1.html")
         session.clear()
@@ -93,9 +92,11 @@ def index_lulu():
             p = figure(plot_width=800, plot_height=350, x_axis_type="datetime")
             
             # add renderers
-            
+            j=0
             for i in app_STMilestone.prTypes:
                 p.line(dates, stocks[i], color=colors[j], legend=i)
+                if j > 3 : j = 0
+            else:
                 j+=1
             
             # NEW: customize by setting attributes
