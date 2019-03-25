@@ -47,7 +47,7 @@ cmdict["BA"]="The Boeing Company"
 def index_lulu():
     app_STMilestone.prTypes=[]
     if request.method == "GET":
-        request.form = {}
+#        request.form = {}
         return render_template("Page1.html")
 
     else:
@@ -111,7 +111,7 @@ def index_lulu():
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
             save(p)
-            request.form = {}
+#            request.form = {}
             return redirect("/plot")
           
 
