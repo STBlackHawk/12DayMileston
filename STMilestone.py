@@ -11,8 +11,18 @@ import simplejson as json
 import pandas as pd
 from pandas.io.json import json_normalize 
 from bokeh.plotting import figure, output_file, show, save
-from flask import Flask,render_template,request,redirect, session
+from flask import Flask,render_template,request,redirect, session, Request
 import datetime
+import os
+
+#from werkzeug.datastructures import MultiDict
+#class MyRequest(Request):
+#    """Request subclass to override request parameter storage"""
+#    parameter_storage_class = MultiDict
+#class MyFlask(Flask):
+#    """Flask subclass using the custom request class"""
+#    request_class = MyRequest
+
 
 
 
@@ -47,7 +57,15 @@ cmdict["BA"]="The Boeing Company"
 def index_lulu():
     app_STMilestone.prTypes=[]
     if request.method == "GET":
-#        request.form = {}
+#        for i in request.form:
+#            del request.form[i]
+        
+#        if os.path.isfile("templates/stocks.html"):
+#            try:
+#                os.remove("templates/stocks.html")
+#            except OSError as e:
+#                pass
+            
         return render_template("Page1.html")
 
     else:
@@ -111,13 +129,17 @@ def index_lulu():
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
             save(p)
+            request.form.data=""
+#            request.form.reset()
+#            request.form.clear()
 #            request.form = {}
-            return redirect("/plot")
+#            return redirect("/plot")
+            return render_template("stocks.html")
           
 
 @app_STMilestone.route("/plot")
-def plot():
-    return render_template("stocks.html")
+#def plot():
+#    return render_template("stocks.html")
 
 
 @app_STMilestone.route("/error", methods=["GET","POST"])
