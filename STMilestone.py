@@ -13,29 +13,14 @@ from pandas.io.json import json_normalize
 from bokeh.plotting import figure, output_file, show, save
 from flask import Flask,render_template,request,redirect, session, Request
 import datetime
-import os
-
-#from werkzeug.datastructures import MultiDict
-#class MyRequest(Request):
-#    """Request subclass to override request parameter storage"""
-#    parameter_storage_class = MultiDict
-#class MyFlask(Flask):
-#    """Flask subclass using the custom request class"""
-#    request_class = MyRequest
-
-
-
-
-
-
 
 
 
 app_STMilestone = Flask(__name__)
 
 
-
-
+stocks ={}
+testdic ={}
 colors = ["navy", "green", "purple", "red"]
 prTypes = ["Adj_Open","Adj_High", "Adj_Low", "Adj_Close"]
 cmdict={}
@@ -43,13 +28,7 @@ cmdict["HD"] = "Home Depot"
 cmdict["DIS"] = "The Walt Disney Company"
 cmdict["MSFT"]="Microsoft Corporation"
 cmdict["BA"]="The Boeing Company" 
-#
-#
-#prType={}
-#prType["Adjusted Open"] = "Adj_Open"
-#prType["Adjusted High"] = "Adj_High"
-#prType["Adjusted Low"] = "Adj_Low"
-#prType["Adjusted Closing"] = "Adj_Close"
+
 
 
 
@@ -57,45 +36,35 @@ cmdict["BA"]="The Boeing Company"
 def index_lulu():
     app_STMilestone.prTypes=[]
     if request.method == "GET":
-#        for i in request.form:
-#            del request.form[i]
-        
-#        if os.path.isfile("templates/stocks.html"):
-#            try:
-#                os.remove("templates/stocks.html")
-#            except OSError as e:
-#                pass
             
         return render_template("Page1.html")
 
     else:
-        app_STMilestone.Company = request.form["Company"]
-        app_STMilestone.stDate = request.form["stdate"]
-        app_STMilestone.endDate = request.form["enddate"]
+        testdic = request.form
+        app_STMilestone.Company = request.form.get("Company")
+        app_STMilestone.stDate = request.form.get("stdate")
+        app_STMilestone.endDate = request.form.get("enddate")
         
         
         for i in prTypes:
             if request.form.__contains__(i):
-                app_STMilestone.prTypes.append(request.form[i])
+                app_STMilestone.prTypes.append(request.form.get(i))
         
-#        app_STMilestone.prTypes.append(request.form["Adj_Open"])
-#        app_STMilestone.prTypes.append(request.form["Adj_High"])
-#        app_STMilestone.prTypes.append(request.form["Adj_Low"])
-#        app_STMilestone.prTypes.append(request.form["Adj_Close"])
+
         
         
         
         stDate = datetime.datetime.strptime(app_STMilestone.stDate,"%Y-%m-%d").strftime("%Y-%m-%d")
         endDate = datetime.datetime.strptime(app_STMilestone.endDate,"%Y-%m-%d").strftime("%Y-%m-%d")
 
-        if stDate > endDate :
+        if stDate >= endDate :
             return redirect("/error")
         else:
             r = requests.get("https://www.quandl.com/api/v3/datasets/EOD/"+app_STMilestone.Company+"?start_date="+app_STMilestone.stDate+"&end_date="+app_STMilestone.endDate+"&api_key=eyATCrv5WpEWyhfUJ_Ge")
             data =r.json() 
             db = pd.DataFrame(data["dataset"]["data"], columns=data["dataset"]["column_names"])
             
-            stocks={}
+            stocks.clear()
             
             # prepare some data
             for i in app_STMilestone.prTypes:
@@ -107,7 +76,7 @@ def index_lulu():
             
             
             # output to static HTML file
-            output_file("templates/stocks.html", title="stocks.py example")
+            output_file("templates/stocks.html", title="stocks")
             
             # create a new plot with a a datetime axis type
             p = figure(plot_width=800, plot_height=350, x_axis_type="datetime")
@@ -129,11 +98,8 @@ def index_lulu():
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
             save(p)
-            request.form.data=""
-#            request.form.reset()
-#            request.form.clear()
-#            request.form = {}
-#            return redirect("/plot")
+    
+
             return render_template("stocks.html")
           
 
@@ -152,4 +118,4 @@ def error():
 
 
 if __name__ == "__main__":
-    app_STMilestone.run(debug=True)
+    app_STMilestone.run(debug=False)
