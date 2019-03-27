@@ -19,8 +19,7 @@ import datetime
 app_STMilestone = Flask(__name__)
 
 
-stocks ={}
-testdic ={}
+
 colors = ["navy", "green", "purple", "red"]
 prTypes = ["Adj_Open","Adj_High", "Adj_Low", "Adj_Close"]
 cmdict={}
@@ -35,39 +34,39 @@ cmdict["BA"]="The Boeing Company"
 @app_STMilestone.route("/",methods=["GET","POST"])
 def index_lulu():
     app_STMilestone.prTypes=[]
+    stocks ={}
+    prtype =[]
     if request.method == "GET":
             
         return render_template("Page1.html")
 
     else:
-        testdic = request.form
-        app_STMilestone.Company = request.form.get("Company")
-        app_STMilestone.stDate = request.form.get("stdate")
-        app_STMilestone.endDate = request.form.get("enddate")
+        Company = request.form.get("Company")
+        stDate = request.form.get("stdate")
+        endDate = request.form.get("enddate")
         
         
         for i in prTypes:
             if request.form.__contains__(i):
-                app_STMilestone.prTypes.append(request.form.get(i))
+                prtype.append(request.form.get(i))
         
 
         
         
         
-        stDate = datetime.datetime.strptime(app_STMilestone.stDate,"%Y-%m-%d").strftime("%Y-%m-%d")
-        endDate = datetime.datetime.strptime(app_STMilestone.endDate,"%Y-%m-%d").strftime("%Y-%m-%d")
+        stDate = datetime.datetime.strptime(stDate,"%Y-%m-%d").strftime("%Y-%m-%d")
+        endDate = datetime.datetime.strptime(endDate,"%Y-%m-%d").strftime("%Y-%m-%d")
 
         if stDate >= endDate :
             return redirect("/error")
         else:
-            r = requests.get("https://www.quandl.com/api/v3/datasets/EOD/"+app_STMilestone.Company+"?start_date="+app_STMilestone.stDate+"&end_date="+app_STMilestone.endDate+"&api_key=eyATCrv5WpEWyhfUJ_Ge")
+            r = requests.get("https://www.quandl.com/api/v3/datasets/EOD/"+Company+"?start_date="+stDate+"&end_date="+endDate+"&api_key=eyATCrv5WpEWyhfUJ_Ge")
             data =r.json() 
             db = pd.DataFrame(data["dataset"]["data"], columns=data["dataset"]["column_names"])
             
-            stocks.clear()
             
             # prepare some data
-            for i in app_STMilestone.prTypes:
+            for i in prtype:
                 stocks[i] = np.array(db[i])
             
             
@@ -83,14 +82,14 @@ def index_lulu():
             
             # add renderers
             j=0
-            for i in app_STMilestone.prTypes:
+            for i in prtype:
                 if j > 3 : 
                     j = 0
                 p.line(dates, stocks[i], color=colors[j], legend=i)
                 j+=1
             
             # NEW: customize by setting attributes
-            p.title.text = cmdict[app_STMilestone.Company]+" stock prices From "+app_STMilestone.stDate +" to "+app_STMilestone.endDate 
+            p.title.text = cmdict[Company]+" stock prices From "+stDate +" to "+endDate 
             p.legend.location = "top_left"
             p.grid.grid_line_alpha = 0
             p.xaxis.axis_label = 'Date'
