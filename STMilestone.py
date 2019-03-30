@@ -100,11 +100,11 @@ def index_lulu():
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
             save(p)
-            return render_template("stocks.html")
+            return redirect("/plot")
 
           
 
-@app_STMilestone.route("/bokeh")
+@app_STMilestone.route("/plot")
 def plot():
     return render_template("stocks.html")
 
