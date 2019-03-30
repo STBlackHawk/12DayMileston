@@ -5,13 +5,13 @@ Created on Thu Mar 21 18:21:11 2019
 
 @author: blackhawk
 """
+import os
 import numpy as np
 import requests
-import simplejson as json
+
 import pandas as pd
-from pandas.io.json import json_normalize 
-from bokeh.plotting import figure, output_file, show, save
-from flask import Flask,render_template,request,redirect, session, Request
+from bokeh.plotting import figure, output_file, save
+from flask import Flask,render_template,request,redirect
 import datetime
 
 
@@ -28,12 +28,15 @@ cmdict["DIS"] = "The Walt Disney Company"
 cmdict["MSFT"]="Microsoft Corporation"
 cmdict["BA"]="The Boeing Company" 
 
+os.environ["API.i"] = "https://www.quandl.com/api/v3/datasets/EOD/"
+os.environ["API.ii"] = "?start_date="
+os.environ["API.iii"] = "&end_date="
+os.environ["API.iv"] = "&api_key=eyATCrv5WpEWyhfUJ_Ge"
 
 
 
 @app_STMilestone.route("/",methods=["GET","POST"])
 def index_lulu():
-    app_STMilestone.prTypes=[]
     stocks ={}
     prtype =[]
     if request.method == "GET":
@@ -60,7 +63,7 @@ def index_lulu():
         if stDate >= endDate :
             return redirect("/error")
         else:
-            r = requests.get("https://www.quandl.com/api/v3/datasets/EOD/"+Company+"?start_date="+stDate+"&end_date="+endDate+"&api_key=eyATCrv5WpEWyhfUJ_Ge")
+            r = requests.get(os.environ["API.i"]+Company+os.environ["API.ii"]+stDate+os.environ["API.iii"]+endDate+os.environ["API.iv"])
             data =r.json() 
             db = pd.DataFrame(data["dataset"]["data"], columns=data["dataset"]["column_names"])
             
@@ -97,14 +100,14 @@ def index_lulu():
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
             save(p)
-    
-
             return render_template("stocks.html")
+
           
 
-@app_STMilestone.route("/plot")
-#def plot():
-#    return render_template("stocks.html")
+@app_STMilestone.route("/bokeh")
+def plot():
+    return render_template("stocks.html")
+
 
 
 @app_STMilestone.route("/error", methods=["GET","POST"])
