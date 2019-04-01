@@ -11,8 +11,21 @@ import requests
 
 import pandas as pd
 from bokeh.plotting import figure, output_file, save
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect, url_for
 import datetime
+
+
+import io
+import random
+
+from jinja2 import Template
+
+from bokeh.embed import components
+from bokeh.plotting import figure
+from bokeh.resources import INLINE
+from bokeh.util.browser import view
+
+from bokeh.resources import CDN
 
 
 
@@ -36,7 +49,7 @@ os.environ["API.iv"] = "&api_key=eyATCrv5WpEWyhfUJ_Ge"
 
 
 @app_STMilestone.route("/",methods=["GET","POST"])
-def index_lulu():
+def index():
     stocks ={}
     prtype =[]
     if request.method == "GET":
@@ -78,7 +91,7 @@ def index_lulu():
             
             
             # output to static HTML file
-            output_file("templates/stocks.html", title="stocks")
+#            output_file("template/stocks.html", title="stocks")
             
             # create a new plot with a a datetime axis type
             p = figure(plot_width=800, plot_height=350, x_axis_type="datetime")
@@ -99,14 +112,13 @@ def index_lulu():
             p.yaxis.axis_label = 'Price'
             p.ygrid.band_fill_color = "olive"
             p.ygrid.band_fill_alpha = 0.1
-            save(p)
-            return redirect("/plot")
+#            save(p)
+            script, div = components(p)
+            return render_template("plot.html", script = script, div = div, 
+                                   Company = cmdict[Company] )
+            
 
           
-
-@app_STMilestone.route("/plot")
-def plot():
-    return render_template("stocks.html")
 
 
 
